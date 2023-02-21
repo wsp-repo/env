@@ -1,6 +1,14 @@
-import { EnvProperty, StringValue } from './index';
+import { EnvProperty, StringValue, StringValues } from '../index';
 
-class Config {
+class EnvConfig {
   @EnvProperty('ENV_STRING', StringValue)
-  strValue!: string;
+  public strValue!: string;
+
+  @EnvProperty('ENV_STRINGS', StringValues)
+  public strValues!: string[];
 }
+
+const config = new EnvConfig();
+
+console.info(`strValue = ${JSON.stringify(config.strValue, null, 2)}`);
+console.info(`strValues = ${JSON.stringify(config.strValues, null, 2)}`);
