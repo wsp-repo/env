@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { isUndefined } from '../helpers';
 import {
   BooleanParser,
@@ -40,6 +36,13 @@ function getEnvValue(name: string): string | undefined {
 }
 
 /**
+ * Определение сеттера для env-свойств
+ */
+function throwSetter(): void {
+  throw new Error('Property not writeble');
+}
+
+/**
  * Декоратор для чтения переменных окружения
  */
 export function EnvProperty(
@@ -47,11 +50,12 @@ export function EnvProperty(
   parser: ParserFn,
   defValue?: unknown,
 ) {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   return (target: Object, propertyKey: string): void => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const value = parser(getEnvValue(envName), defValue as any);
-    const attrs = { get: () => value, set: (): void => {} };
+    const propValue = parser(getEnvValue(envName), defValue as any);
+    const attr = { get: () => propValue, set: throwSetter };
 
-    Object.defineProperty(target, propertyKey, attrs);
+    Object.defineProperty(target, propertyKey, attr);
   };
 }
