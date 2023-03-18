@@ -1,4 +1,4 @@
-export type CustomParser = <T>(
+export type CustomParser = (
   envValue?: string,
-  defValue?: T,
-) => T | undefined;
+  defValue?: any,
+) => any | undefined;
